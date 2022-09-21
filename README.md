@@ -4,7 +4,9 @@ Ok, it's just one hook really. This cheeky little script reacts to a Subversion 
 
 It looks a little something like this:
 
-![](Preview.png)
+<p align="center">
+  <img src="https://github.com/DaveFace/Cheeky-Discord-SVN-Hooks/blob/main/Preview.png"/>
+</p>
 
 *FYI: The webhook username / icon is set in your Discord server, not the script.*
 
