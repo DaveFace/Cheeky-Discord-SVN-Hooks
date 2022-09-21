@@ -82,8 +82,7 @@ def yeet(payload: dict):
 	except requests.exceptions.HTTPError as whoops:
 		print(f"💩 - {whoops}")
 	else:
-		print(
-			f"💦 - Webhook delivered successfully! Code {message.status_code}")
+		print(f"💦 - Webhook delivered successfully! Code {message.status_code}")
 
 
 # Specify character limits
