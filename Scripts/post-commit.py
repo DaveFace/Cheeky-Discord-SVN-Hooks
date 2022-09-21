@@ -120,8 +120,7 @@ changelist_raw = svnlook("changed")
 changelist_dict = make_changelist_dict(changelist_raw)
 
 # Format the revision text. Nice.
-revision_text = f"#{revision_id} (nice)" if revision_id.endswith(
-	"69") else f"#{revision_id}"
+revision_text = f"#{revision_id} (nice)" if revision_id.endswith("69") else f"#{revision_id}"
 
 # Put it all together
 payload = {
