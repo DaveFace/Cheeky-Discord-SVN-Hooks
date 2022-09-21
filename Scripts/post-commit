@@ -1,0 +1,22 @@
+#!/bin/sh
+
+# Discord Webhook URL
+WEBHOOK="YOUR-WEBHOOK-URL"
+
+# Absolute path to your repository
+# You could use the supplied argument instead, but it will almost definitely not work unless you configure
+# a hook script environment (conf/hooks-env), at which point you may as well just hardcode it here
+REPO="/svn/YourRepository"
+# PATH="$1"
+
+# Absolute path to Python  - this is the default location, you shouldn't need to change this
+PYTHON="/usr/bin/python3"
+
+# Absolute path to SVN Look - this is the default location, you shouldn't need to change this
+SVNLOOK="/usr/bin/svnlook"
+
+# Args from Subversion
+REVISION="$2" # Revision number of this commit
+TRANSACTION="$3" # The name of this transaction
+
+"$PYTHON" "$REPO"/hooks/post-commit.py "$SVNLOOK" "$WEBHOOK" "$REPO" "$REVISION"
