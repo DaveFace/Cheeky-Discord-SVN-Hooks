@@ -17,6 +17,5 @@ SVNLOOK="/usr/bin/svnlook"
 
 # Args from Subversion
 REVISION="$2" # Revision number of this commit
-TRANSACTION="$3" # The name of this transaction
 
 "$PYTHON" "$REPO"/hooks/post-commit.py "$SVNLOOK" "$WEBHOOK" "$REPO" "$REVISION"
