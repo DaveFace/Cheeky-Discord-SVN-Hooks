@@ -1,8 +1,8 @@
-# Cheeky Discord SVN Hook(s)
+# Cheeky Discord SVN Hooks
 
-Ok, it's just one hook really. This cheeky little script reacts to a Subversion post-commit action, and sends a nice looking webhook to Discord.
+These hook scripts can be used to send a Webhook to Discord when someone makes a change to a Subversion repository. With a few modifications you could make it work for other SVN hooks, too.
 
-It looks a little something like this:
+There are two versions: one is a simple bash script, another is a Python script. Both do the job, but the Python script grabs a few extra details. It looks a little something like this:
 
 <p align="center">
   <img src="https://github.com/DaveFace/Cheeky-Discord-SVN-Hooks/blob/main/Preview.png"/>
@@ -13,7 +13,7 @@ It looks a little something like this:
 ## Installing
 
 - This has only been tested on a Linux server (Ubuntu, specifically) running vanilla Apache Subversion
-- It uses Python, and has been tested on Python 3.8 and 3.10
+- The Python script has been tested on Python 3.8 and 3.10
 
 ### 1 - Set up the Discord Bot
 
@@ -21,29 +21,30 @@ It looks a little something like this:
 2. Set the Icon and Name to whatever you want - the script doesn't interfere with these
 3. Click **Copy Webhook URL**
 
-
 ### 2 - Configure the Script
 
-Open the `post-commit` file in an editor, Notepad will do if you have no shame. This is the file without a `.py` extension - it's a Bash script that Subversion will call first.
+Open the `post-commit` file in an editor (Notepad will do if you have no shame) - this is the file without a `.py` extension. It's a Bash script that Subversion will call on certain events, called hooks, when placed inside your repository's hooks directory.
 
-- Change `WEBHOOK=` to your Discord Webhook URL
-- Change `REPO=` to your repository path, e.g. `/svn/Your-Repo-Name`, no slash at the end!
+1. Change `WEBHOOK=` to your Discord Webhook URL
+2. Change `REPO=` to your server's repository path, e.g. `/mnt/svn/your-repo-name`, do not use the `/home/svn/your-repo-name` path
 
 ### 3 - Install it
 
-1. Copy the scripts into `/svn/Your-Repo-Name/hooks`
-2. Navigate to `/svn/Your-Repo-Name/hooks` and run the following commands:
-   1. `chmod a+x post-commit`
-   2. `chmod a+x post-commit.py`
-3. Test the script with the command `.\post-commit "blah" 69`, or some other revision number you know exists
+1. Copy the scripts from either the `Bash` or `Python` directory into `/mnt/svn/your-repo-name/hooks`
+2. Use the terminal to navigate to `/mnt/svn/your-repo-name/hooks` and run the following commands:
+   1. `sudo chmod a+x post-commit`
+   2. `sudo chmod a+x post-commit.py` (if using the python script)
+3. If you're using the Python script, make sure the requests package is installed (`pip install requests`)
+4. Test the script with the command `./post-commit "blah" 69`, or some other revision number you know exists
 
 ## Troubleshooting
 
-If the script doesn't run, it's probably one of these issues:
+If either script doesn't run, it's probably one of these issues:
 
 - Insufficent permissions on the script, try the following commands:
   - `chown www-data:www-data post-commit`
   - `chown www-data:www-data post-commit.py`
 - A path is set incorrectly
   - The PYTHON and SVNLOOK paths should be broadly applicable, but double check that these are correct
-  - Double check the Webhook URL. Then check it again. I am speaking from experience: I spent about 30 minutes troubleshooting a missing character on the end of my URL.
+  - The repository path should be the server location, not the user location (i.e. it should not be /home/svn/your-repo) - [otherwise you'll encounter this issue](https://github.com/svn-all-fast-export/svn2git/issues/133)
+  - Double check the Webhook URL, then check it again
