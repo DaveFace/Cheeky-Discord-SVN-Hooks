@@ -1,0 +1,43 @@
+#!/bin/sh
+
+# Function to check if a command exists
+command_exists() {
+    command -v "$1" >/dev/null 2>&1
+}
+
+# Ensure curl is installed
+if ! command_exists curl; then
+    echo "curl not found, installing..."
+    apk update && apk add --no-cache curl
+    if [ $? -ne 0 ]; then
+        echo "Failed to install curl, exiting."
+        exit 1
+    fi
+fi
+
+WEBHOOK="https://discord.com/api/webhooks/6969696969696969" # Discord Webhook URL
+REPO="/mnt/subversion/your-repo-name" # Path to repo - this avoids some shenanigans with environment setups
+SVNLOOK="/usr/bin/svnlook" # Default path to SVNLook
+REVISION="$2" # Revision number of this commit from Subversion
+
+# Get details using SVNLOOK
+AUTHOR=$($SVNLOOK author $REPO -r $REVISION)
+MESSAGE=$($SVNLOOK log $REPO -r $REVISION)
+
+# Create payload
+PAYLOAD=$(cat <<EOF
+{
+  "embeds": [
+    {
+      "title": "🎉 Hooray! A new commit from $AUTHOR (Revision $REVISION)",
+      "color": 15277667,
+      "description": "$MESSAGE",
+      "timestamp": "$(date --utc +%FT%TZ)"
+    }
+  ]
+}
+EOF
+)
+
+# Yeet payload to Discord webhook
+curl -H "Content-Type: application/json" -X POST -d "$PAYLOAD" "$WEBHOOK"
